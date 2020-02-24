@@ -371,10 +371,7 @@ function animate() {
     var startx = 68.19;
     var destx = 49.19;
 
-    var startx2 = 10;
-    var destx2 = 0;
-
-    var duration = 5000;
+    var duration = 7000;
     var start = null;
 
     function startAnim(timeStamp) {
@@ -387,7 +384,9 @@ function animate() {
         if (now - start >= duration) stop = true;
         var p = (now - start) / duration;
         var val = easeInOutCubic(p);
+
         cameraFocalDistance = startx + (destx - startx) * val;
+
         resetCanvas();
         requestAnimationFrame(draw);
     }
