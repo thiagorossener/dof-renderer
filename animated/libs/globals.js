@@ -10,7 +10,7 @@ var focalPowerFunction = 0;
 var minimumLineSize = 0.015;
 
 // how many render calls are made each frame
-var drawCallsPerFrame = 5;
+var drawCallsPerFrame = 1;
 
 
 // wether each line has assigned a quantity of points proportional to its length or a fixed number instead

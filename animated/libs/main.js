@@ -374,7 +374,7 @@ function animate() {
     var startx2 = 10;
     var destx2 = 0;
 
-    var duration = 10000;
+    var duration = 5000;
     var start = null;
 
     function startAnim(timeStamp) {
