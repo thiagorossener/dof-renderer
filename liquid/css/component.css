@@ -3,16 +3,6 @@ canvas {
   position: absolute;
   left: 0;
   top: 0;
-  animation: reveal 6s;
-}
-
-@keyframes reveal {
-  from {
-    filter: blur(80px);
-  }
-  to {
-    filter: blur(0px);
-  }
 }
 
 .scene-nav {
@@ -42,8 +32,4 @@ canvas {
 
 .icon--arrow-nav-next {
   transform: rotate(-180deg);
-}
-
-.slide-item__image {
-  object-fit: cover;
 }
