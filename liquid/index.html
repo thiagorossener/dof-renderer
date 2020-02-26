@@ -41,8 +41,6 @@
   <script src="js/main.js"></script>
   <script src="js/imagesloaded.pkgd.min.js"></script>
   <script>
-    imagesLoaded(document.body, () => document.body.classList.remove('loading'));
-
     var spriteImages = document.querySelectorAll('.slide-item__image');
     var spriteImagesSrc = [];
 
@@ -55,9 +53,14 @@
       sprites: spriteImagesSrc,
       centerSprites: true,
       displacementImage: 'img/dmaps/2048x2048/clouds.jpg',
-      autoPlay: true,
+      autoPlay: false,
       autoPlaySpeed: [10, 3],
       displaceScale: [200, 70]
+    });
+
+    imagesLoaded(document.body, () => {
+      document.body.classList.remove('loading');
+      initCanvasSlideshow.play();
     });
   </script>
 </body>

@@ -149,13 +149,13 @@
 
             richText.anchor.set(0.5);
             richText.x = image.width / 2;
-            richText.y = image.height / 2;                     
+            richText.y = image.height / 2;
           }
           
           if ( options.centerSprites === true ) {
             image.anchor.set(0.5);
             image.x = renderer.width / 2;
-            image.y = renderer.height / 2;            
+            image.y = renderer.height / 2;
           }
           // image.transform.scale.x = 1.3;
           // image.transform.scale.y = 1.3;
@@ -167,16 +167,15 @@
           }
 
           slidesContainer.addChild( image );
-
-        } 
+        }
         
       };
       
-
+      var shouldPlay = false;
 
       /// ---------------------------
       //  DEFAULT RENDER/ANIMATION
-      /// ---------------------------        
+      /// ---------------------------
       if ( options.autoPlay === true ) {
 
         var ticker = new PIXI.ticker.Ticker();
@@ -184,12 +183,11 @@
         ticker.autoStart = options.autoPlay;
 
         ticker.add(function( delta ) {
-          
+
           displacementSprite.x += options.autoPlaySpeed[0] * delta;
           displacementSprite.y += options.autoPlaySpeed[1];
           
           renderer.render( stage );
-
         });
 
       }  else {
@@ -198,18 +196,77 @@
 
           render.autoStart = true;
 
+          function easeOutCubic(t) {
+            return (--t)*t*t+1;
+          }
+
+          // Speed
+          var startSpeedX = 20;
+          var endSpeedX = 0;
+          var startSpeedY = 6;
+          var endSpeedY = 0;
+
+          // Scale
+          var startScaleX = options.displaceScale[0];
+          var endScaleX = options.displaceScaleTo[0];
+          var startScaleY = options.displaceScale[1];
+          var endScaleY = options.displaceScaleTo[1];
+
+          var duration = 10000;
+
+          var start = null;
+          var stop = false;
+
           render.add(function( delta ) {
+            if (shouldPlay) {
+              var now = Date.now();
+
+              // Start animating
+              if (!start) {
+                console.log('Start animating.')
+                start = Date.now();
+                now = start;
+              }
+
+              // Stop animating
+              if (stop) return;
+              if (now - start >= duration) {
+                console.log('Stop animating.')
+                stop = true;
+              }
+
+              // Apply ease function
+              var progress = (now - start) / duration;
+              var val = easeOutCubic(progress);
+
+              // Update speed
+              options.autoPlaySpeed[0] = startSpeedX + (endSpeedX - startSpeedX) * val;
+              options.autoPlaySpeed[1] = startSpeedY + (endSpeedY - startSpeedY) * val;
+
+              // Animate
+
+              var scaleX = startScaleX + (endScaleX - startScaleX) * val;
+              var scaleY = startScaleY + (endScaleY - startScaleY) * val;
+              TweenMax.set(displacementFilter.scale, { x: scaleX, y: scaleY });
+
+              displacementSprite.x += options.autoPlaySpeed[0] * delta;
+              displacementSprite.y += options.autoPlaySpeed[1];
+            }
+
             renderer.render( stage );
-          });        
-        
-      }    
+          });
+      }
+
+      this.play = function () {
+        shouldPlay = true;
+      }
       
 
       /// ---------------------------
       //  TRANSITION BETWEEN SLIDES
-      /// ---------------------------    
-      var isPlaying   = false;  
-      var slideImages = slidesContainer.children;    
+      /// ---------------------------
+      var isPlaying   = false;
+      var slideImages = slidesContainer.children;
       this.moveSlider = function( newIndex ) {
 
         isPlaying = true;
@@ -224,7 +281,7 @@
          },onUpdate: function() {
           
             if ( options.wacky === true ) {
-              displacementSprite.rotation += baseTimeline.progress() * 0.02;      
+              displacementSprite.rotation += baseTimeline.progress() * 0.02;
               displacementSprite.scale.set( baseTimeline.progress() * 3 );
             }
       
@@ -234,12 +291,12 @@
         
         if ( baseTimeline.isActive() ) {
           return;
-        }        
+        }
         
         baseTimeline
           .to(displacementFilter.scale, 1, { x: options.displaceScale[0], y: options.displaceScale[1]  })
           .to(slideImages[that.currentIndex], 0.5, { alpha: 0 })
-          .to(slideImages[newIndex], 0.5, { alpha: 1 })          
+          .to(slideImages[newIndex], 0.5, { alpha: 1 })
           .to(displacementFilter.scale, 1, { x: options.displaceScaleTo[0], y: options.displaceScaleTo[1] } );
 
       };

@@ -1,5 +1,5 @@
 canvas {
-  animation: 8s reveal 0s ease-in-out both;
+  animation: 8s reveal 0s cubic-bezier(0.215, 0.61, 0.355, 1) both;
 }
 
 @keyframes reveal {
