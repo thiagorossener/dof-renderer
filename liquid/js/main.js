@@ -212,7 +212,7 @@
           var startScaleY = options.displaceScale[1];
           var endScaleY = options.displaceScaleTo[1];
 
-          var duration = 10000;
+          var duration = 12000;
 
           var start = null;
           var stop = false;
